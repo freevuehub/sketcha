@@ -1,0 +1,13 @@
+{
+  "name": "@sketcha/utils",
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "eventemitter3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@sketcha/types": "workspace:*",
+    "@sketcha/constant": "workspace:*",
+    "perfect-freehand": "catalog:freehand"
+  }
+}

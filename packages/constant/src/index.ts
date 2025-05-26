@@ -1,0 +1,18 @@
+export enum CanvasType {
+  SYNC = 'sync',
+  ASYNC = 'async',
+}
+export enum EventListenerType {
+  TOUCH = 'SKETCHA.TOUCH',
+  TAP = 'SKETCHA.TAP',
+  CLICK = 'SKETCHA.CLICK',
+  DOUBLE_TAP = 'SKETCHA.TAP.DOUBLE',
+  DRAW_START = 'SKETCHA.DRAW.START',
+  DRAWING = 'SKETCHA.DRAW.ING',
+  DRAW_END = 'SKETCHA.DRAW.END',
+  POINT_DROP = 'SKETCHA.POINT.DROP',
+  POINT_UP = 'SKETCHA.POINT.UP',
+  POINT_SELECT = 'SKETCHA.POINT.SELECT',
+}
+
+export * from './cssText'

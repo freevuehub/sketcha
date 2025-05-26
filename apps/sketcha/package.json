@@ -1,0 +1,23 @@
+{
+  "name": "@freevuehub/sketcha",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc && vite build --mode development"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "devDependencies": {
+    "@sketcha/types": "workspace:*",
+    "@sketcha/utils": "workspace:*",
+    "@types/node": "^20.17.30",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.19"
+  },
+  "dependencies": {
+    "@sketcha/constant": "workspace:*",
+    "@sketcha/utils": "workspace:*"
+  }
+}

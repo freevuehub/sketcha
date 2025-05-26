@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["node"],
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "lib": ["ESNext", "DOM"],
+    "declaration": true,
+    "strict": true,
+  },
+  "include": ["src/**/*", "./vite-env.d.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}

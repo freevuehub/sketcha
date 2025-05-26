@@ -1,0 +1,7 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+catalogs:
+  freehand:
+    perfect-freehand: ^1.2.2

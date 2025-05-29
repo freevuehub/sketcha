@@ -3,101 +3,79 @@ import { CanvasType, EventListenerType } from '@sketcha/constant'
 import { pipe } from '@fxts/core'
 import type { Point } from '@sketcha/types'
 
-class EventManager extends HTMLElement {
-  readonly MOVE_THRESHOLD: number = 0
-
-  moveCount: number = 0
-  isTouch: boolean = false
+class EventManager extends HTMLCanvasElement {
   isDrawing: boolean = false
 }
 
 class CommonCanvas extends EventManager {
-  prevPoints: Point[] = []
   canvasElement: HTMLCanvasElement | null = null
+
+  static observedAttributes = ['type', 'color']
 
   constructor() {
     super()
 
     this.style.cssText = `
       display: block;
+      position: absolute;
       width: 100%;
       height: 100%;
-      position: absolute;
       inset: 0;
+      touch-action: none;
+      z-index: ${this.getAttribute('type') === CanvasType.ASYNC ? -1 : 1};
     `
-  }
-
-  get Context() {
-    if (this.canvasElement === null) return null
-
-    const context = this.canvasElement.getContext('2d')
-
-    return context!
-  }
-
-  render(type: CanvasType) {
-    this.canvasElement = pipe(
+    pipe(
       window,
       ({ innerWidth, innerHeight, devicePixelRatio }) => ({
         width: innerWidth,
         height: innerHeight,
         ratio: devicePixelRatio,
       }),
-      createCanvas(type)
+      (size) => {
+        this.width = size.width * size.ratio
+        this.height = size.height * size.ratio
+      }
     )
-    this.style.zIndex = `${type === CanvasType.ASYNC ? -1 : 1}`
 
-    this.append(this.canvasElement)
-    this.canvasElement.addEventListener('touchstart', (event) => {
-      this.isTouch = event.touches.length > 1
-    })
-    this.canvasElement.addEventListener('touchmove', (event) => {
-      pipe(event.currentTarget as HTMLCanvasElement, (element) => {
-        if (this.isTouch) {
-          events.emit(EventListenerType.TOUCH, event, element)
-        }
-      })
-    })
-    this.canvasElement.addEventListener('touchend', () => {
-      setTimeout(() => {
-        this.isTouch = false
-      }, 100)
-    })
-    this.canvasElement.addEventListener('pointerdown', (event) => {
+    this.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'touch') return
+      if (event.pointerType === 'mouse' && !event.ctrlKey) return
+
       pipe(event.currentTarget as HTMLCanvasElement, (element) => {
         element.setPointerCapture(event.pointerId)
-
-        if (this.isTouch) return
-
+        this.isDrawing = true
         events.emit(EventListenerType.DRAW_START, event, element)
       })
     })
-    this.canvasElement.addEventListener('pointermove', (event) => {
+    this.addEventListener('pointermove', (event) => {
+      if (!this.isDrawing) return
+      // if (event.pointerType === 'touch') return
+
       pipe(event.currentTarget as HTMLCanvasElement, (element) => {
         if (!element.hasPointerCapture(event.pointerId)) return
-        if (this.isTouch) return
-        if (this.moveCount >= this.MOVE_THRESHOLD) {
-          events.emit(EventListenerType.DRAWING, event, element)
-
-          this.isDrawing || (this.isDrawing = true)
-        } else {
-          this.moveCount++
-        }
+        this.isDrawing && events.emit(EventListenerType.DRAWING, event, element)
       })
     })
-    this.canvasElement.addEventListener('pointerup', (event) => {
+    this.addEventListener('pointerup', (event) => {
+      if (!this.isDrawing) return
+
+      // if (event.pointerType === 'touch') return
       pipe(event.currentTarget as HTMLCanvasElement, (element) => {
-        this.prevPoints = []
-        this.moveCount = 0
-
-        if (this.isTouch) return
-
+        this.isDrawing = false
         events.emit(EventListenerType.DRAW_END, event, element)
       })
     })
+    this.addEventListener('pointercancel', (event) => {
+      if (!this.isDrawing) return
+      // if (event.pointerType === 'touch') return
+      pipe(event.currentTarget as HTMLCanvasElement, (element) => {
+        this.isDrawing = false
+      })
+    })
   }
-  destroy() {
-    this.canvasElement && this.canvasElement.remove()
+
+  get Context() {
+    return this.getContext('2d')!
   }
 }
 

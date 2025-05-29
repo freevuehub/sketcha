@@ -1,4 +1,4 @@
-import { events, createCanvas } from '@sketcha/utils'
+import { events } from '@sketcha/utils'
 import { CanvasType, EventListenerType } from '@sketcha/constant'
 import { pipe } from '@fxts/core'
 import type { Point } from '@sketcha/types'

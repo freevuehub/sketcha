@@ -2,10 +2,13 @@
   "name": "@sketcha/demo",
   "type": "module",
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "test": "playwright test --headed"
   },
   "devDependencies": {
-    "@types/node": "^20.17.30",
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^20.17.50",
+    "playwright": "^1.52.0",
     "typescript": "^5.8.3",
     "vite": "^5.4.19"
   },

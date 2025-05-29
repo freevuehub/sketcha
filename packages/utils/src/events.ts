@@ -1,16 +1,17 @@
 import { EventListenerType } from '@sketcha/constant'
-import type { Point } from '@sketcha/types'
+import type { Point, PointOption, WindowSize } from '@sketcha/types'
 import EventEmitter from 'eventemitter3'
 
 export type EventTypes = {
   [EventListenerType.DRAW_START]: [PointerEvent, HTMLCanvasElement]
   [EventListenerType.DRAWING]: [PointerEvent, HTMLCanvasElement]
   [EventListenerType.DRAW_END]: [PointerEvent, HTMLCanvasElement]
-  [EventListenerType.TOUCH]: [TouchEvent, HTMLCanvasElement]
-  [EventListenerType.POINT_DROP]: [Point[], HTMLCanvasElement]
-  [EventListenerType.POINT_UP]: [Point[], HTMLCanvasElement]
-  [EventListenerType.POINT_SELECT]: [Point[]]
-  [EventListenerType.CLICK]: [PointerEvent, HTMLCanvasElement]
+  [EventListenerType.POINTER_DROP]: [Array<Point>, PointOption, HTMLCanvasElement]
+  [EventListenerType.POINTER_UP]: [Point[], HTMLCanvasElement]
+  [EventListenerType.POINTER_SELECT]: [Point[]]
+  [EventListenerType.RESIZE_START]: [WindowSize, Window]
+  [EventListenerType.RESIZE_ING]: [WindowSize, Window]
+  [EventListenerType.RESIZE_END]: [WindowSize, Window]
 }
 
 const eventEmitter = new EventEmitter()
